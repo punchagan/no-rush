@@ -170,7 +170,7 @@ a:hover {
 }
 
 .hero-image-container {
-  max-width: 800px;
+  max-width: 600px;
   width: 100%;
   margin-bottom: var(--space-lg);
   opacity: 0;
