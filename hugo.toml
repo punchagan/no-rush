@@ -1,0 +1,41 @@
+baseURL = "https://example.com/"
+languageCode = "en-us"
+title = "Site Name"
+
+
+# We're using custom layouts, no theme needed
+
+[params]
+  description = "Detailed worlds in ink & paper"
+  author = "Your Name"
+  email = "hello@yourname.com"
+  instagram = "https://instagram.com/yourhandle"
+  behance = "https://behance.net/yourhandle"
+
+  # Hero image on homepage (place in static/images/)
+  heroImage = "/images/own-light.jpg"
+  heroAlt = "A detailed ink drawing of a moonlit garden"
+
+[menu]
+  [[menu.main]]
+    name = "Work"
+    url = "/work/"
+    weight = 1
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+  [[menu.main]]
+    name = "Connect"
+    url = "/connect/"
+    weight = 3
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML"]
+  page = ["HTML"]
