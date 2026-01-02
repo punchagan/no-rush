@@ -2,6 +2,8 @@
 
 <!-- Hero Section -->
 <section class="home-hero">
+  <p class="hero-tagline">{{ .Site.Params.description }}</p>
+
   <div class="hero-image-container">
     {{ with .Site.Params.heroImage }}
     <img
@@ -17,8 +19,6 @@
     </div>
     {{ end }}
   </div>
-
-  <p class="hero-tagline">{{ .Site.Params.description }}</p>
 </section>
 
 <!-- About Section -->
