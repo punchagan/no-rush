@@ -615,6 +615,115 @@ a:hover {
 }
 
 /* ===================================
+   Single-Page Sections
+   =================================== */
+
+/* About Section */
+.about-section {
+  padding: var(--space-xl) var(--space-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-container {
+  text-align: center;
+}
+
+.about-headline {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  margin-bottom: var(--space-md);
+  color: var(--ink);
+}
+
+.about-bio {
+  margin-bottom: var(--space-lg);
+}
+
+.about-bio p {
+  margin-bottom: var(--space-md);
+}
+
+.about-group {
+  margin-bottom: var(--space-lg);
+}
+
+.about-group h3 {
+  font-size: 0.8rem;
+  font-family: var(--font-nav);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+/* Work Section */
+.work-section {
+  padding: var(--space-xl) var(--space-md);
+  background: var(--soft-cream);
+}
+
+.work-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.work-header {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+/* Connect Section */
+.connect-section {
+  padding: var(--space-xl) var(--space-md);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.connect-header {
+  margin-bottom: var(--space-sm);
+}
+
+.connect-subtitle {
+  color: var(--zen-gray);
+  margin-bottom: var(--space-lg);
+}
+
+.connect-services ul {
+  list-style: none;
+  font-size: 1rem;
+  margin-bottom: var(--space-lg);
+}
+
+.connect-services li {
+  padding: var(--space-xs) 0;
+  padding-left: var(--space-md);
+  position: relative;
+}
+
+.connect-services li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.connect-direct {
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--light-gray);
+}
+
+.connect-email a {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* ===================================
    Responsive
    =================================== */
 

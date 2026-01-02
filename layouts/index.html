@@ -1,10 +1,12 @@
 {{ define "main" }}
+
+<!-- Hero Section -->
 <section class="home-hero">
   <div class="hero-image-container">
     {{ with .Site.Params.heroImage }}
-    <img 
-      src="{{ . }}" 
-      alt="{{ $.Site.Params.heroAlt }}" 
+    <img
+      src="{{ . }}"
+      alt="{{ $.Site.Params.heroAlt }}"
       class="hero-image"
       loading="eager"
     >
@@ -15,9 +17,110 @@
     </div>
     {{ end }}
   </div>
-  
-  <p class="hero-tagline">{{ .Site.Params.description }}</p>
 
-  <a href="/work/" class="hero-cta">View Work</a>
+  <p class="hero-tagline">{{ .Site.Params.description }}</p>
 </section>
+
+<!-- About Section -->
+<section id="about" class="about-section">
+  {{ with .Site.GetPage "about" }}
+    <div class="about-container">
+      {{ with .Params.headline }}
+        <h2 class="about-headline">{{ . }}</h2>
+      {{ end }}
+
+      <div class="about-bio">
+        {{ .Content }}
+      </div>
+
+      {{ with .Params.mediums }}
+      <div class="about-group">
+        <h3>Mediums</h3>
+        <div class="tag-list">
+          {{ range . }}
+            <span class="tag">{{ . }}</span>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ with .Params.themes }}
+      <div class="about-group">
+        <h3>Themes</h3>
+        <div class="tag-list">
+          {{ range . }}
+            <span class="tag">{{ . }}</span>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  {{ end }}
+</section>
+
+<!-- Work Section -->
+<section id="work" class="work-section">
+  <div class="work-container">
+    <h2 class="work-header">Work</h2>
+
+    <div class="gallery-grid">
+      {{ $workPages := where .Site.RegularPages "Section" "work" }}
+      {{ range $workPages.ByDate.Reverse }}
+      <a href="{{ .Permalink }}" class="gallery-item fade-in">
+        {{ with .Params.image }}
+        <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+        {{ else }}
+        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f0ede5, #e8e4db);"></div>
+        {{ end }}
+        <div class="gallery-item-overlay">
+          <div class="gallery-item-info">
+            <h3 class="gallery-item-title">{{ .Title }}</h3>
+            {{ with .Params.medium }}
+            <span class="gallery-item-medium">{{ . }}</span>
+            {{ end }}
+          </div>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<!-- Connect Section -->
+<section id="connect" class="connect-section">
+  {{ with .Site.GetPage "connect" }}
+    <div class="connect-container">
+      <h2 class="connect-header">{{ .Title }}</h2>
+      {{ with .Params.subtitle }}
+        <p class="connect-subtitle">{{ . }}</p>
+      {{ end }}
+
+      {{ with .Params.services }}
+      <div class="connect-services">
+        <ul>
+          {{ range . }}
+            <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+
+      <div class="connect-direct">
+        <p class="connect-email">
+          <a href="mailto:{{ $.Site.Params.email }}">{{ $.Site.Params.email }}</a>
+        </p>
+
+        <div class="social-links">
+          {{ with $.Site.Params.instagram }}
+            <a href="{{ . }}" target="_blank" rel="noopener">Instagram</a>
+          {{ end }}
+          {{ with $.Site.Params.behance }}
+            <a href="{{ . }}" target="_blank" rel="noopener">Behance</a>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  {{ end }}
+</section>
+
 {{ end }}
