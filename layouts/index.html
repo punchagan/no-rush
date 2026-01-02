@@ -1,0 +1,23 @@
+{{ define "main" }}
+<section class="home-hero">
+  <div class="hero-image-container">
+    {{ with .Site.Params.heroImage }}
+    <img 
+      src="{{ . }}" 
+      alt="{{ $.Site.Params.heroAlt }}" 
+      class="hero-image"
+      loading="eager"
+    >
+    {{ else }}
+    <!-- Placeholder when no hero image is set -->
+    <div style="width: 100%; aspect-ratio: 4/3; background: linear-gradient(135deg, #f0ede5, #e8e4db); display: flex; align-items: center; justify-content: center; color: #8a8a8a; font-style: italic;">
+      Your artwork here
+    </div>
+    {{ end }}
+  </div>
+  
+  <p class="hero-tagline">{{ .Site.Params.description }}</p>
+
+  <a href="/work/" class="hero-cta">View Work</a>
+</section>
+{{ end }}
