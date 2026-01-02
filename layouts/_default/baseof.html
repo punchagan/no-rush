@@ -40,16 +40,20 @@
       </button>
 
       <nav class="site-nav" role="navigation">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <div class="nav-dropdown">
-          <a href="#art" class="nav-dropdown-toggle">Art</a>
-          <div class="nav-dropdown-menu">
-            <a href="#art-pages">Pages</a>
-            <a href="#art-commissions">Commissions</a>
-          </div>
-        </div>
-        <a href="#connect">Connect</a>
+        {{ range .Site.Menus.main }}
+          {{ if .HasChildren }}
+            <div class="nav-dropdown">
+              <a href="{{ .URL }}" class="nav-dropdown-toggle">{{ .Name }}</a>
+              <div class="nav-dropdown-menu">
+                {{ range .Children }}
+                  <a href="{{ .URL }}">{{ .Name }}</a>
+                {{ end }}
+              </div>
+            </div>
+          {{ else }}
+            <a href="{{ .URL }}">{{ .Name }}</a>
+          {{ end }}
+        {{ end }}
       </nav>
     </header>
 

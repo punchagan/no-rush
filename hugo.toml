@@ -18,17 +18,32 @@ title = "Site Name"
 
 [menu]
   [[menu.main]]
-    name = "Work"
-    url = "/work/"
+    name = "Home"
+    url = "#home"
     weight = 1
   [[menu.main]]
     name = "About"
-    url = "/about/"
+    url = "#about"
     weight = 2
   [[menu.main]]
-    name = "Connect"
-    url = "/connect/"
+    name = "Art"
+    url = "#art"
     weight = 3
+    identifier = "art"
+  [[menu.main]]
+    name = "Pages"
+    url = "#art-pages"
+    weight = 1
+    parent = "art"
+  [[menu.main]]
+    name = "Commissions"
+    url = "#art-commissions"
+    weight = 2
+    parent = "art"
+  [[menu.main]]
+    name = "Connect"
+    url = "#connect"
+    weight = 4
 
 [markup]
   [markup.goldmark]
