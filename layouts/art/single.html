@@ -1,0 +1,31 @@
+{{ define "main" }}
+<article class="single-art">
+  <div class="single-art-image">
+    {{ with .Params.image }}
+    <img src="{{ . }}" alt="{{ $.Title }}" />
+    {{ end }}
+  </div>
+
+  <div class="single-art-details">
+    <div class="single-art-info">
+      <h1>{{ .Title }}</h1>
+      <p class="single-art-meta">
+        {{ with .Params.medium }}{{ . }}{{ end }} {{ with .Params.size }} · {{ .
+        }}{{ end }} {{ with .Params.year }} · {{ . }}{{ end }}
+      </p>
+    </div>
+
+    <div class="single-art-description">{{ .Content }}</div>
+  </div>
+
+  <nav class="single-art-nav">
+    {{ with .PrevInSection }}
+    <a href="{{ .Permalink }}">← {{ .Title }}</a>
+    {{ else }}
+    <span></span>
+    {{ end }} {{ with .NextInSection }}
+    <a href="{{ .Permalink }}">{{ .Title }} →</a>
+    {{ end }}
+  </nav>
+</article>
+{{ end }}

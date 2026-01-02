@@ -13,7 +13,7 @@ title = "Site Name"
   behance = "https://behance.net/yourhandle"
 
   # Hero image on homepage (place in static/images/)
-  heroImage = "/images/own-light.jpg"
+  heroImage = "/images/art/own-light.jpg"
   heroAlt = "A detailed ink drawing of a moonlit garden"
 
 [menu]
