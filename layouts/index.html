@@ -149,21 +149,11 @@
     <h2 class="connect-header">{{ .Title }}</h2>
     {{ with .Params.subtitle }}
     <p class="connect-subtitle">{{ . }}</p>
-    {{ end }} {{ with .Params.services }}
-    <div class="connect-services">
-      <ul>
-        {{ range . }}
-        <li>{{ . }}</li>
-        {{ end }}
-      </ul>
-    </div>
     {{ end }}
-
     <div class="connect-direct">
       <p class="connect-email">
         <a href="mailto:{{ $.Site.Params.email }}">{{ $.Site.Params.email }}</a>
       </p>
-
       <div class="social-links">
         {{ with $.Site.Params.instagram }}
         <a href="{{ . }}" target="_blank" rel="noopener">Instagram</a>
