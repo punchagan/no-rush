@@ -787,9 +787,9 @@ a:hover {
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 1;
-    object-fit: cover;
-    background: var(--soft-cream);
+    max-height: 500px;
+    object-fit: contain;
+    background: transparent;
 }
 
 .carousel-nav {
