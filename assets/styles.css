@@ -4,14 +4,14 @@
    =================================== */
 
 :root {
-    --ink: #1a1a1a;
-    --paper: #f5f1eb;
-    --soft-cream: #f0ebe3;
-    --pale-pink: #f4e8e9;
-    --pale-mint: #e8f3f0;
-    --zen-gray: #666666;
-    --accent: #a67676;
-    --light-gray: #d4d4d4;
+    --ink: #f0ebe3;
+    --paper: #0a0a0a;
+    --soft-cream: #1a1614;
+    --pale-pink: #1a1a1a;
+    --pale-mint: #121212;
+    --zen-gray: #9a9a9a;
+    --accent: #c49a9a;
+    --light-gray: #333333;
 
     --font-display: "Cormorant Garamond", Georgia, serif;
     --font-nav: "Josefin Sans", sans-serif;
@@ -104,7 +104,7 @@ a:hover {
 }
 
 .site-header.scrolled {
-    background: rgba(248, 246, 241, 0.95);
+    background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(10px);
 }
 
@@ -539,7 +539,8 @@ a:hover {
     width: 100%;
     padding: var(--space-sm);
     border: 1px solid var(--light-gray);
-    background: white;
+    background: var(--soft-cream);
+    color: var(--ink);
     font-family: var(--font-body);
     font-size: 1rem;
     transition: border-color var(--transition);
@@ -660,6 +661,11 @@ a:hover {
 /* About Section */
 .about-section {
     padding: var(--space-xl) var(--space-md);
+    max-width: none;
+    background: var(--soft-cream);
+}
+
+.about-section > .about-container {
     max-width: 800px;
     margin: 0 auto;
 }
@@ -701,7 +707,7 @@ a:hover {
 /* Art Section */
 .art-section {
     padding: var(--space-xl) var(--space-md);
-    background: var(--soft-cream);
+    background: var(--paper);
 }
 
 .art-container {
@@ -790,7 +796,7 @@ a:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(20, 20, 20, 0.9);
     border: 1px solid var(--light-gray);
     color: var(--ink);
     font-size: 2.5rem;
@@ -808,7 +814,7 @@ a:hover {
 }
 
 .carousel-nav:hover {
-    background: white;
+    background: var(--soft-cream);
     border-color: var(--accent);
     color: var(--accent);
 }
@@ -829,9 +835,14 @@ a:hover {
 /* Connect Section */
 .connect-section {
     padding: var(--space-xl) var(--space-md);
+    max-width: none;
+    text-align: center;
+    background: var(--soft-cream);
+}
+
+.connect-section > .connect-container {
     max-width: 600px;
     margin: 0 auto;
-    text-align: center;
 }
 
 .connect-header {
