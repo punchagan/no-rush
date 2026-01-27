@@ -15,7 +15,7 @@
 
     --font-display: "Cormorant Garamond", Georgia, serif;
     --font-nav: "Josefin Sans", sans-serif;
-    --font-body: "Source Sans 3", sans-serif;
+    --font-body: "Cormorant Garamond", Georgia, serif;
     --font-handwritten: "Dancing Script", cursive;
 
     --space-xs: 0.75rem;
@@ -45,7 +45,7 @@ html {
 body {
     font-family: var(--font-body);
     font-weight: 300;
-    font-size: 18px;
+    font-size: 21px;
     background-color: var(--paper);
     color: var(--ink);
     line-height: 1.8;
