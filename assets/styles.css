@@ -469,10 +469,10 @@ a:hover {
 }
 
 .about-section h2 {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     font-family: var(--font-nav);
     font-weight: 400;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: var(--space-sm);
@@ -698,10 +698,10 @@ a:hover {
 }
 
 .about-group h3 {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-family: var(--font-nav);
     font-weight: 400;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: var(--space-sm);
