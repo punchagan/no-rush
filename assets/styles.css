@@ -671,7 +671,7 @@ a:hover {
 }
 
 .about-container {
-    text-align: center;
+    text-align: left;
 }
 
 .about-headline {
@@ -687,7 +687,7 @@ a:hover {
 }
 
 .about-bio p {
-    margin: 0 auto var(--space-md) auto;
+    margin-bottom: var(--space-md);
 }
 
 .about-group {
