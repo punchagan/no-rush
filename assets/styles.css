@@ -687,7 +687,7 @@ a:hover {
 }
 
 .about-bio p {
-    margin-bottom: var(--space-md);
+    margin: 0 auto var(--space-md) auto;
 }
 
 .about-group {
