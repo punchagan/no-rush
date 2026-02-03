@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+"""
+Fetch artwork metadata from Google Spreadsheet and download images from Google Drive.
+
+Creates Hugo content files in content/art/ and downloads images to static/images/art/.
+"""
+
+import csv
+import io
+import os
+import re
+import sys
+from pathlib import Path
+
+import requests
+
+HERE = Path(__file__).parent.resolve()
+ROOT = HERE.parent
+CONTENT_DIR = ROOT / "content" / "art"
+IMAGES_DIR = ROOT / "static" / "images" / "art"
+
+# Google Drive URL patterns
+IMAGE_PREFIX = "https://drive.google.com/uc?export=download&id="
+
+
+def get_metadata_url():
+    """Get the metadata CSV URL from SHEET_ID environment variable."""
+    sheet_id = os.environ.get("SHEET_ID")
+    if not sheet_id:
+        sys.exit("Error: SHEET_ID environment variable not set")
+    return f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+
+
+def slugify(text):
+    """Convert text to URL-friendly slug."""
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    text = re.sub(r"-+", "-", text)
+    return text.strip("-")
+
+
+MONTHS = {
+    "january": 1, "february": 2, "march": 3, "april": 4,
+    "may": 5, "june": 6, "july": 7, "august": 8,
+    "september": 9, "october": 10, "november": 11, "december": 12,
+}
+
+
+def parse_date(date_str):
+    """Parse human-friendly dates like 'June 2024' or 'April-May 2025' to YYYY-MM-DD.
+
+    For date ranges, uses the end month for sorting purposes.
+    """
+    if not date_str:
+        return ""
+
+    date_str = date_str.strip().lower()
+
+    # Match "Month YYYY" or "Month-Month YYYY"
+    match = re.match(r"([a-z]+)(?:-([a-z]+))?\s+(\d{4})", date_str)
+    if not match:
+        return date_str  # Return as-is if we can't parse
+
+    month1, month2, year = match.groups()
+
+    # Use end month if it's a range, otherwise use the single month
+    month_name = month2 if month2 else month1
+    month_num = MONTHS.get(month_name)
+
+    if not month_num:
+        return date_str  # Return as-is if month not recognized
+
+    return f"{year}-{month_num:02d}-01"
+
+
+def download_metadata(metadata_url):
+    """Download and parse CSV metadata from Google Spreadsheet."""
+    print(f"Fetching metadata from spreadsheet...")
+    response = requests.get(metadata_url)
+    response.raise_for_status()
+
+    f = io.StringIO(response.text)
+    data = [
+        {key.strip().lower(): val.strip() for key, val in row.items()}
+        for row in csv.DictReader(f)
+    ]
+
+    print(f"Found {len(data)} artwork entries")
+    return data
+
+
+def download_image(session, image_id, download_dir, filename=None):
+    """Download a single image from Google Drive."""
+    if filename is None:
+        filename = image_id
+
+    filepath = download_dir / filename
+    if filepath.exists():
+        print(f"  Skipping {filename} (already exists)")
+        return filepath
+
+    url = f"{IMAGE_PREFIX}{image_id}"
+    print(f"  Downloading {filename}...")
+
+    try:
+        with session.get(url, stream=True, timeout=30) as r:
+            if r.status_code != 200:
+                print(f"  Failed to download {image_id} (status {r.status_code})")
+                return None
+
+            with open(filepath, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+        return filepath
+    except requests.RequestException as e:
+        print(f"  Error downloading {image_id}: {e}")
+        return None
+
+
+def get_image_extension(image_id, session):
+    """Detect image extension from content-type header."""
+    url = f"{IMAGE_PREFIX}{image_id}"
+    try:
+        response = session.head(url, timeout=10, allow_redirects=True)
+        content_type = response.headers.get("content-type", "")
+        if "png" in content_type:
+            return ".png"
+        elif "jpeg" in content_type or "jpg" in content_type:
+            return ".jpg"
+        elif "gif" in content_type:
+            return ".gif"
+        elif "webp" in content_type:
+            return ".webp"
+    except requests.RequestException:
+        pass
+    return ".jpg"  # Default to jpg
+
+
+def generate_content_file(item, image_filename):
+    """Generate Hugo markdown content file for an artwork."""
+    title = item.get("title", "Untitled")
+    slug = slugify(title)
+    filepath = CONTENT_DIR / f"{slug}.md"
+
+    # Build frontmatter
+    date = parse_date(item.get("date", ""))
+    year = date[:4] if date and date[0].isdigit() else ""
+    frontmatter = {
+        "title": title,
+        "date": date,
+        "image": f"/images/art/{image_filename}" if image_filename else "",
+        "medium": item.get("medium", ""),
+        "size": item.get("size", ""),
+        "year": year,
+        "category": item.get("category", "personal"),
+    }
+
+    # Filter out empty values
+    frontmatter = {k: v for k, v in frontmatter.items() if v}
+
+    # Build markdown content
+    lines = ["---"]
+    for key, value in frontmatter.items():
+        if isinstance(value, str) and (
+            '"' in value or ":" in value or value != value.strip()
+        ):
+            lines.append(f'{key}: "{value}"')
+        else:
+            lines.append(f"{key}: {value}")
+    lines.append("---")
+    lines.append("")
+
+    # Add description as body content if present
+    description = item.get("description", "").strip()
+    if description:
+        lines.append(description)
+        lines.append("")
+
+    with open(filepath, "w") as f:
+        f.write("\n".join(lines))
+
+    print(f"  Created {filepath.name}")
+    return filepath
+
+
+def process_artwork(item, session):
+    """Process a single artwork entry: download image and create content file."""
+    title = item.get("title", "")
+    image_id = item.get("image_id", "").strip()
+
+    if not title:
+        print("Skipping entry with no title")
+        return
+
+    if not image_id:
+        print(f"Skipping {title}: no image_id provided")
+        return
+
+    if not item.get("show").lower()[:1] == "y":
+        print(f"Skipping {title}: show flag not set to 'yes'")
+        return
+
+    print(f"Processing: {title}")
+
+    image_filename = None
+    # Create filename from slug + detected extension
+    slug = slugify(title)
+    ext = get_image_extension(image_id, session)
+    image_filename = f"{slug}{ext}"
+
+    downloaded = download_image(session, image_id, IMAGES_DIR, image_filename)
+    if not downloaded:
+        print(f"  Warning: Could not download image for {title}")
+        image_filename = None
+
+    generate_content_file(item, image_filename)
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Download artwork images and generate Hugo content from Google Spreadsheet"
+    )
+    parser.add_argument(
+        "--clean",
+        action="store_true",
+        help="Remove existing content/art/*.md files before generating",
+    )
+
+    args = parser.parse_args()
+    metadata_url = get_metadata_url()
+
+    # Create directories
+    CONTENT_DIR.mkdir(parents=True, exist_ok=True)
+    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Clean existing content if requested
+    if args.clean:
+        print("Cleaning existing content files...")
+        for f in CONTENT_DIR.glob("*.md"):
+            if f.name != "_index.md":
+                f.unlink()
+                print(f"  Removed {f.name}")
+
+    # Fetch and process
+    metadata = download_metadata(metadata_url)
+    session = requests.Session()
+
+    for item in metadata:
+        process_artwork(item, session)
+
+    print("\nDone!")
+
+
+if __name__ == "__main__":
+    main()
