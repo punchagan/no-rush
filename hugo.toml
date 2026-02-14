@@ -1,20 +1,20 @@
 baseURL = "https://example.com/"
 languageCode = "en-us"
-title = "Site Name"
+title = "No Rush"
 
 
 # We're using custom layouts, no theme needed
 
 [params]
-  description = "Detailed worlds in ink & paper"
+  description = "I draw whatever shifts the flow of time for me. It can be the bark of a peepal. the shape of clouds on a dry summer day. the frown on my mother's face. the arc of a swing. the leftover coffee in a mug. the stitches on pillows. friendships. possibilities of multiple universes. a kind touch. stardust."
   author = "Your Name"
   email = "hello@yourname.com"
   instagram = "https://instagram.com/yourhandle"
   behance = "https://behance.net/yourhandle"
 
   # Hero image on homepage (place in static/images/)
-  heroImage = "/images/art/own-light.jpg"
-  heroAlt = "A detailed ink drawing of a moonlit garden"
+  heroImage = "/images/art/many-attempts-at-drawing-a-circle.png"
+  heroAlt = "A detailed drawing of a moon-like celestial object"
 
 [menu]
   [[menu.main]]
