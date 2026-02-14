@@ -93,68 +93,79 @@
         .querySelectorAll(".fade-in")
         .forEach((el) => fadeObserver.observe(el));
 
-      // Carousel functionality (desktop only)
-      if (window.innerWidth > 768) {
-        document
-          .querySelectorAll(".carousel-container")
-          .forEach((container) => {
-            const track = container.querySelector(".carousel-track");
-            const items = Array.from(
-              container.querySelectorAll(".carousel-item"),
-            );
-            const prevBtn = container.querySelector(".carousel-prev");
-            const nextBtn = container.querySelector(".carousel-next");
+      // Carousel functionality
+      document
+        .querySelectorAll(".carousel-container")
+        .forEach((container) => {
+          const track = container.querySelector(".carousel-track");
+          const trackContainer = container.querySelector(".carousel-track-container");
+          const items = Array.from(
+            container.querySelectorAll(".carousel-item"),
+          );
+          const prevBtn = container.querySelector(".carousel-prev");
+          const nextBtn = container.querySelector(".carousel-next");
+          const isMobile = () => window.innerWidth <= 768;
 
-            let currentIndex = 0;
+          let currentIndex = 0;
 
-            function updateCarousel() {
-              // Update active class
+          function updateCarousel() {
+            if (isMobile()) {
+              // Mobile: scroll the container
+              const item = items[currentIndex];
+              const itemRect = item.getBoundingClientRect();
+              const containerRect = trackContainer.getBoundingClientRect();
+              const scrollLeft = trackContainer.scrollLeft
+                + (itemRect.left - containerRect.left)
+                - (containerRect.width - itemRect.width) / 2;
+              trackContainer.scrollTo({ left: scrollLeft, behavior: "smooth" });
+            } else {
+              // Desktop: translate the track
               items.forEach((item, index) => {
                 item.classList.toggle("active", index === currentIndex);
               });
 
-              // Center the active item
               const containerWidth = container.offsetWidth;
               const itemWidth = items[0].offsetWidth;
-              const itemMargin = 32; // 2rem margin on each side = 64px total
+              const itemMargin = 32;
               const offset =
                 containerWidth / 2 -
                 itemWidth / 2 -
                 currentIndex * (itemWidth + itemMargin * 2);
 
               track.style.transform = `translateX(${offset}px)`;
-
-              // Update button states
-              prevBtn.disabled = currentIndex === 0;
-              nextBtn.disabled = currentIndex === items.length - 1;
             }
 
-            // Click side items to center them
-            items.forEach((item, index) => {
-              item.addEventListener("click", (e) => {
-                if (index !== currentIndex) {
-                  e.preventDefault();
-                  currentIndex = index;
-                  updateCarousel();
-                }
-              });
-            });
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === items.length - 1;
+          }
 
-            // Arrow navigation
-            prevBtn.addEventListener("click", () => {
-              currentIndex = Math.max(0, currentIndex - 1);
-              updateCarousel();
+          // Click side items to center them (desktop)
+          items.forEach((item, index) => {
+            item.addEventListener("click", (e) => {
+              if (!isMobile() && index !== currentIndex) {
+                e.preventDefault();
+                currentIndex = index;
+                updateCarousel();
+              }
             });
+          });
 
-            nextBtn.addEventListener("click", () => {
-              currentIndex = Math.min(items.length - 1, currentIndex + 1);
-              updateCarousel();
-            });
-
-            // Initialize
+          // Arrow navigation
+          prevBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            currentIndex = Math.max(0, currentIndex - 1);
             updateCarousel();
           });
-      }
+
+          nextBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            currentIndex = Math.min(items.length - 1, currentIndex + 1);
+            updateCarousel();
+          });
+
+          // Initialize
+          updateCarousel();
+        });
     </script>
   </body>
 </html>
