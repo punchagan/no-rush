@@ -201,6 +201,10 @@ a:hover {
     flex: 1;
 }
 
+body:not(.home) .site-main {
+    padding-top: 9rem;
+}
+
 /* Footer */
 .site-footer {
     padding: var(--space-lg) var(--space-md);

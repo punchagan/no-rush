@@ -64,6 +64,12 @@
     </footer>
 
     <script>
+      // Sticky header background on scroll
+      const header = document.querySelector(".site-header");
+      window.addEventListener("scroll", () => {
+        header.classList.toggle("scrolled", window.scrollY > 10);
+      }, { passive: true });
+
       // Mobile menu toggle
       const menuToggle = document.querySelector(".menu-toggle");
       const nav = document.querySelector(".site-nav");
