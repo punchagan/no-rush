@@ -16,6 +16,8 @@ title = "No Rush"
   heroImage = "/images/art/many-attempts-at-drawing-a-circle.png"
   heroAlt = "A detailed drawing of a moon-like celestial object"
 
+[params.patr]
+name = "This Week's Read"
 [menu]
   [[menu.main]]
     name = "Home"
