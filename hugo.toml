@@ -18,6 +18,7 @@ title = "No Rush"
 
 [params.patr]
 name = "This Week's Read"
+email_only = true
 [menu]
   [[menu.main]]
     name = "Home"
